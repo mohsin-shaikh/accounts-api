@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -13,36 +14,44 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $attr = $request->validate([
+        $validateData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed'
         ]);
 
         $user = User::create([
-            'name' => $attr['name'],
-            'password' => bcrypt($attr['password']),
-            'email' => $attr['email']
+            'name' => $validateData['name'],
+            'email' => $validateData['email'],
+            'password' => Hash::make($validateData['password']),
         ]);
 
+        $token = $user->createToken('auth_token')->plainTextToken;
+
         return $this->success([
-            'token' => $user->createToken('tokens')->plainTextToken
+            'access_token' => $token,
+            'token_type' => 'Bearer',
         ]);
     }
 
     public function login(Request $request)
     {
-        $attr = $request->validate([
+        $validateData = $request->validate([
             'email' => 'required|string|email|',
             'password' => 'required|string|min:6'
         ]);
 
-        if (!Auth::attempt($attr)) {
+        if (!Auth::attempt($validateData)) {
             return $this->error('Credentials not match', 401);
         }
 
+        $user = User::where('email', $validateData['email'])->firstOrFail();
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
         return $this->success([
-            'token' => auth()->user()->createToken('API Token')->plainTextToken
+            'access_token' => $token,
+            'token_type' => 'Bearer',
         ]);
     }
 
