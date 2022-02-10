@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
+use App\Http\Resources\CustomersResource;
+use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
@@ -13,9 +15,9 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return CustomersResource::collection(Customer::where('book_id', $request->book)->get());
     }
 
     /**
@@ -25,7 +27,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        // Not Used
     }
 
     /**
@@ -36,7 +38,8 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-        //
+        $customer = Customer::create($request->all());
+        return new CustomersResource($customer);
     }
 
     /**
@@ -58,7 +61,7 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        //
+        // Not Used
     }
 
     /**
