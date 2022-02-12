@@ -4,14 +4,10 @@ namespace App\Exceptions;
 
 use Throwable;
 use Exception;
-use App\Exceptions\APIExceptionTrait;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
-    use APIExceptionTrait;
 
     /**
      * A list of the exception types that are not reported.
@@ -46,27 +42,10 @@ class Handler extends ExceptionHandler
         $this->renderable(function (Exception $exception, $request) {
             // dd($exception);
             if ($request->is('api/*')) {
-                // return $this->apiException($request, $exception);
-                // return $this->ApiExceptions($request, $exception);
                 return $this->handleApiException($request, $exception);
             }
         });
     }
-
-    /**
-     * Convert an authentication exception into an unauthenticated response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Auth\AuthenticationException  $exception
-     * @return \Illuminate\Http\Response
-     */
-    // protected function unauthenticated($request, AuthenticationException $exception)
-    // {
-    //     if ($request->is('api/*')) {
-    //         return response()->json(['error' => 'Unauthenticated.'], 401);
-    //     }
-    //     return redirect()->guest(route('login'));
-    // }
 
     private function handleApiException($request, Exception $exception)
     {
