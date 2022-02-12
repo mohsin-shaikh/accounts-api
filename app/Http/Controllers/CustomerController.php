@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Resources\CustomersResource;
@@ -25,9 +26,9 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Book $book)
     {
-        return CustomersResource::collection(Customer::where('book_id', $request->book)->paginate(10));
+        return CustomersResource::collection($book->customers()->paginate(10));
     }
 
     /**
@@ -46,9 +47,10 @@ class CustomerController extends Controller
      * @param  \App\Http\Requests\StoreCustomerRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCustomerRequest $request)
+    public function store(StoreCustomerRequest $request, Book $book)
     {
         $customer = Customer::create($request->all());
+        $book->customers()->save($customer);
 
         // return response([
         //     'data' => new CustomersResource($customer)
@@ -62,7 +64,7 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function show(int $book, Customer $customer)
+    public function show(Book $book, Customer $customer)
     {
         // $customer = Customer::find($customer);
         // if (!$customer) {
@@ -89,7 +91,7 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCustomerRequest $request, int $book, Customer $customer)
+    public function update(UpdateCustomerRequest $request, Book $book, Customer $customer)
     {
         // if (!$customer) {
         //     throw new HttpException(400, "Invalid id");
@@ -120,7 +122,6 @@ class CustomerController extends Controller
     public function destroy(Customer $customer)
     {
         $customer->delete();
-
-        return response(null, 204);
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }

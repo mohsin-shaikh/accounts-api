@@ -26,7 +26,7 @@ class UpdateCustomerRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'mobile' => 'required|max:13',
-            'book_id' => 'required|exists:books,id',
+            // 'book_id' => 'required|exists:books,id',
         ];
     }
 
@@ -38,8 +38,8 @@ class UpdateCustomerRequest extends FormRequest
     protected function prepareForValidation()
     {
         // dd($this->mobile);
-        $this->merge([
-            'book_id' => $this->book,
-        ]);
+        // $this->merge([
+        //     'book_id' => $this->book,
+        // ]);
     }
 }

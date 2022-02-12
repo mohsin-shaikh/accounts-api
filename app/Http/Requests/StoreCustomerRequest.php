@@ -26,7 +26,7 @@ class StoreCustomerRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'mobile' => 'required|max:13',
-            'book_id' => 'required|exists:books,id',
+            // 'book_id' => 'required|exists:books,id',
         ];
     }
 
@@ -37,8 +37,8 @@ class StoreCustomerRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $this->merge([
-            'book_id' => $this->book,
-        ]);
+        // $this->merge([
+        //     'book_id' => $this->book,
+        // ]);
     }
 }
