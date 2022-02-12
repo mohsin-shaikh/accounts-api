@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CustomerController extends Controller
 {
-    /**HTTP Status
+    /**
+     * HTTP Status
      * 1XX Info
      * 2XX Response Successfully
      * 3XX Redirection
@@ -19,14 +20,12 @@ class CustomerController extends Controller
      * 5XX Error Server
      */
 
-    /**
-     * Create the controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
-        $this->authorizeResource(Customer::class, 'customer');
+        $this->middleware(function ($request, $next) {
+            $this->authorize('owner', $request->book);
+            return $next($request);
+        });
     }
 
     /**

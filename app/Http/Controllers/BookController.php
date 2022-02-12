@@ -3,24 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\BooksResource;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
-use App\Models\User;
 // use App\Exceptions\BookNotBelongsToUser;
 use Symfony\Component\HttpFoundation\Response;
 
 class BookController extends Controller
 {
-    /**
-     * Create the controller instance.
-     *
-     * @return void
-     */
+
     public function __construct()
     {
-        $this->authorizeResource(Book::class, 'book');
+        $this->middleware(function ($request, $next) {
+            $this->authorize('owner', $request->book);
+            return $next($request);
+        }, ['except' => ['index', 'store']]);
     }
 
     /**

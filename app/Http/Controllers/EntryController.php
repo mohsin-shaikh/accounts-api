@@ -11,6 +11,15 @@ use App\Http\Requests\UpdateEntryRequest;
 
 class EntryController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->authorize('owner', $request->book);
+            return $next($request);
+        });
+    }
+
     /**
      * Display a listing of the resource.
      *
