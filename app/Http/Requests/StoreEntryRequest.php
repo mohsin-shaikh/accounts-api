@@ -13,7 +13,7 @@ class StoreEntryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class StoreEntryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'amount' => 'required|between:1,99999999.99',
+            'details' => 'required|max:255',
+            'type' => 'required|in:in,out',
         ];
     }
 }

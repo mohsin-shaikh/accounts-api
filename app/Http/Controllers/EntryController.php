@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\CustomerNotBelongsToBook;
 use App\Models\Book;
 use App\Models\Entry;
 use App\Models\Customer;
 use App\Http\Resources\EntriesResource;
 use App\Http\Requests\StoreEntryRequest;
 use App\Http\Requests\UpdateEntryRequest;
+use App\Exceptions\CustomerNotBelongsToBook;
 use Symfony\Component\HttpFoundation\Response;
 
 class EntryController extends Controller
@@ -66,7 +66,7 @@ class EntryController extends Controller
      */
     public function show(Book $book, Customer $customer, Entry $entry)
     {
-        //
+        return new EntriesResource($entry);
     }
 
     /**
