@@ -52,7 +52,7 @@ class BookController extends Controller
     public function store(StoreBookRequest $request)
     {
         $book = new Book($request->all());
-        Auth::user()->books()->save($book);
+        User::find(Auth::id())->books()->save($book);
         return new BooksResource($book);
     }
 
