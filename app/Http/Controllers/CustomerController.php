@@ -73,10 +73,6 @@ class CustomerController extends Controller
      */
     public function show(Book $book, Customer $customer)
     {
-        // $customer = Customer::find($customer);
-        // if (!$customer) {
-        //     throw new HttpException(404, 'Customer not found');
-        // }
         return new CustomersResource($customer);
     }
 
