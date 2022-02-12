@@ -38,13 +38,11 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $exception, $request) {
-            if ($request->is('api/*')) {
-                return $this->apiException($request, $exception);
-            }
+        $this->reportable(function (Throwable $e) {
         });
 
         $this->renderable(function (Exception $exception, $request) {
+            // dd($exception);
             if ($request->is('api/*')) {
                 return $this->apiException($request, $exception);
             }

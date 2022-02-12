@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Book;
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class BookPolicy
@@ -18,7 +19,7 @@ class BookPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -30,7 +31,9 @@ class BookPolicy
      */
     public function view(User $user, Book $book)
     {
-        //
+        return $user->id === $book->user_id
+            ? Response::allow()
+            : Response::deny('You are not the owner of this book.');
     }
 
     /**
@@ -41,7 +44,7 @@ class BookPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->id > 0;
     }
 
     /**
@@ -53,7 +56,9 @@ class BookPolicy
      */
     public function update(User $user, Book $book)
     {
-        //
+        return $user->id === $book->user_id
+            ? Response::allow()
+            : Response::deny('You are not the owner of this book.');
     }
 
     /**
@@ -65,7 +70,9 @@ class BookPolicy
      */
     public function delete(User $user, Book $book)
     {
-        //
+        return $user->id === $book->user_id
+            ? Response::allow()
+            : Response::deny('You are not the owner of this book.');
     }
 
     /**

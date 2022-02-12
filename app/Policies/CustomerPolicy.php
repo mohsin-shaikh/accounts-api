@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Book;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -16,9 +17,10 @@ class CustomerPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user, Customer $customer)
     {
-        //
+        dd($customer);
+        // return true;
     }
 
     /**
@@ -30,7 +32,7 @@ class CustomerPolicy
      */
     public function view(User $user, Customer $customer)
     {
-        //
+        return true;
     }
 
     /**

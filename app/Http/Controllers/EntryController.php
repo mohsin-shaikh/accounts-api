@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
 use App\Models\Entry;
+use App\Models\Customer;
+use App\Http\Resources\EntriesResource;
 use App\Http\Requests\StoreEntryRequest;
 use App\Http\Requests\UpdateEntryRequest;
 
@@ -13,9 +16,11 @@ class EntryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Book $book, Customer $customer)
     {
-        //
+        return EntriesResource::collection(
+            $book->customers()->find($customer->id)->entries()->paginate(10)
+        );
     }
 
     /**

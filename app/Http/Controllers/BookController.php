@@ -7,11 +7,22 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\BooksResource;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
+use App\Models\User;
 // use App\Exceptions\BookNotBelongsToUser;
 use Symfony\Component\HttpFoundation\Response;
 
 class BookController extends Controller
 {
+    /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Book::class, 'book');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +30,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        return BooksResource::collection(Book::paginate(10));
+        return BooksResource::collection(User::find(Auth::id())->books()->paginate(10));
     }
 
     /**
