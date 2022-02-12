@@ -13,6 +13,10 @@ class Customer extends Model
 
     protected $fillable = ['name', 'mobile', 'book_id'];
 
+    // protected $table = 'customers';
+
+    // protected $hidden = ['created_at', 'updated_at'];
+
     public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class);
