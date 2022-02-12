@@ -33,3 +33,7 @@ Khatabook API is a RESTful API for accounting.
 -   3XX Redirection
 -   4XX Error Client
 -   5XX Error Server
+
+### License
+
+MIT

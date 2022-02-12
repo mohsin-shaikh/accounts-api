@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CustomerNotBelongsToBook;
 use App\Models\Book;
 use App\Models\Entry;
 use App\Models\Customer;
 use App\Http\Resources\EntriesResource;
 use App\Http\Requests\StoreEntryRequest;
 use App\Http\Requests\UpdateEntryRequest;
+use Symfony\Component\HttpFoundation\Response;
 
 class EntryController extends Controller
 {
@@ -16,6 +18,7 @@ class EntryController extends Controller
     {
         $this->middleware(function ($request, $next) {
             $this->authorize('owner', $request->book);
+            $this->CustomerBookCheck($request->book, $request->customer);
             return $next($request);
         });
     }
@@ -39,7 +42,7 @@ class EntryController extends Controller
      */
     public function create()
     {
-        //
+        // Not Used
     }
 
     /**
@@ -48,9 +51,11 @@ class EntryController extends Controller
      * @param  \App\Http\Requests\StoreEntryRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreEntryRequest $request)
+    public function store(StoreEntryRequest $request, Book $book, Customer $customer)
     {
-        //
+        $entry = new Entry($request->all());
+        $customer->entries()->save($entry);
+        return new EntriesResource($entry);
     }
 
     /**
@@ -59,7 +64,7 @@ class EntryController extends Controller
      * @param  \App\Models\Entry  $entry
      * @return \Illuminate\Http\Response
      */
-    public function show(Entry $entry)
+    public function show(Book $book, Customer $customer, Entry $entry)
     {
         //
     }
@@ -72,7 +77,7 @@ class EntryController extends Controller
      */
     public function edit(Entry $entry)
     {
-        //
+        // Not Used
     }
 
     /**
@@ -82,9 +87,10 @@ class EntryController extends Controller
      * @param  \App\Models\Entry  $entry
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateEntryRequest $request, Entry $entry)
+    public function update(UpdateEntryRequest $request, Book $book, Customer $customer, Entry $entry)
     {
-        //
+        $entry->update($request->all());
+        return new EntriesResource($entry);
     }
 
     /**
@@ -93,8 +99,16 @@ class EntryController extends Controller
      * @param  \App\Models\Entry  $entry
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Entry $entry)
+    public function destroy(Book $book, Customer $customer, Entry $entry)
     {
-        //
+        $entry->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function CustomerBookCheck(Book $book, Customer $customer)
+    {
+        if ($book->customers()->find($customer->id) == null) {
+            throw new CustomerNotBelongsToBook;
+        }
     }
 }

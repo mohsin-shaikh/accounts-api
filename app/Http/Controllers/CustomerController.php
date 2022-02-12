@@ -11,14 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CustomerController extends Controller
 {
-    /**
-     * HTTP Status
-     * 1XX Info
-     * 2XX Response Successfully
-     * 3XX Redirection
-     * 4XX Error Client
-     * 5XX Error Server
-     */
 
     public function __construct()
     {
