@@ -34,14 +34,14 @@ trait ExceptionTrait
     protected function ModelResponse($e)
     {
         return response()->json([
-            'errors' => 'Model not found!'
+            'errors' => 'Model Not Found!'
         ], Response::HTTP_NOT_FOUND);
     }
 
     protected function HttpResponse($e)
     {
         return response()->json([
-            'errors' => 'Route not found!'
+            'errors' => 'Not Found!'
         ], Response::HTTP_NOT_FOUND);
     }
 }

@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Customer;
-use Illuminate\Http\Request;
 use App\Http\Resources\CustomersResource;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CustomerController extends Controller
 {
@@ -49,7 +47,7 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request, Book $book)
     {
-        $customer = Customer::create($request->all());
+        $customer = new Customer($request->all());
         $book->customers()->save($customer);
 
         // return response([
@@ -119,7 +117,7 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Customer $customer)
+    public function destroy(Book $book, Customer $customer)
     {
         $customer->delete();
         return response(null, Response::HTTP_NO_CONTENT);

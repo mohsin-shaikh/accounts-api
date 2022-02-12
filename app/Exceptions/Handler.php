@@ -2,11 +2,15 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\ExceptionTrait;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Exception;
 
 class Handler extends ExceptionHandler
 {
+    use ExceptionTrait;
+
     /**
      * A list of the exception types that are not reported.
      *
@@ -34,8 +38,16 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->reportable(function (Throwable $exception, $request) {
+            if ($request->is('api/*')) {
+                return $this->apiException($request, $exception);
+            }
+        });
+
+        $this->renderable(function (Exception $exception, $request) {
+            if ($request->is('api/*')) {
+                return $this->apiException($request, $exception);
+            }
         });
     }
 }

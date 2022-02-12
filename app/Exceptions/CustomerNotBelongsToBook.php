@@ -8,6 +8,6 @@ class CustomerNotBelongsToBook extends Exception
 {
     public function render()
     {
-        return ['errors' => 'Custom not belongs to Book'];
+        return ['errors' => 'Customer not belongs to Book'];
     }
 }

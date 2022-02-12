@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\BooksResource;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
+// use App\Exceptions\BookNotBelongsToUser;
+use Symfony\Component\HttpFoundation\Response;
 
 class BookController extends Controller
 {
@@ -16,7 +19,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        return BooksResource::collection(Book::all());
+        return BooksResource::collection(Book::paginate(10));
     }
 
     /**
@@ -26,7 +29,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        //
+        // Not Used
     }
 
     /**
@@ -37,7 +40,9 @@ class BookController extends Controller
      */
     public function store(StoreBookRequest $request)
     {
-        //
+        $book = new Book($request->all());
+        Auth::user()->books()->save($book);
+        return new BooksResource($book);
     }
 
     /**
@@ -48,7 +53,7 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        //
+        return new BooksResource($book);
     }
 
     /**
@@ -59,7 +64,7 @@ class BookController extends Controller
      */
     public function edit(Book $book)
     {
-        //
+        // Not Used
     }
 
     /**
@@ -71,7 +76,9 @@ class BookController extends Controller
      */
     public function update(UpdateBookRequest $request, Book $book)
     {
-        //
+        // $this->BookUserCheck($book); // Before this not found is returned
+        $book->update($request->all());
+        return new BooksResource($book);
     }
 
     /**
@@ -82,6 +89,15 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+        // $this->BookUserCheck($book); // Before this not found is returned
+        $book->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
+
+    // public function BookUserCheck(Book $book)
+    // {
+    //     if (Auth::id() !== $book->user_id) {
+    //         throw new BookNotBelongsToUser;
+    //     }
+    // }
 }
