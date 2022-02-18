@@ -1,6 +1,6 @@
-## Khatabook API (Accounting)
+## Cash Book API (Accounting)
 
-Khatabook API is a RESTful API for accounting.
+Cash Book API is a RESTful API for accounting.
 
 ### Endpoints
 
