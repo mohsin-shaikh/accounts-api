@@ -6,6 +6,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EntryController;
+use App\Http\Controllers\{
+    LoginController,
+    LogoutController,
+    RegisterController,
+    UserController
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -18,18 +24,26 @@ use App\Http\Controllers\EntryController;
 |
 */
 
+// Auth ...
+Route::post('/login', LoginController::class);
+Route::post('/register', RegisterController::class);
+Route::post('/logout', LogoutController::class);
+
+// User ...
+Route::get('/user', UserController::class)->middleware(['auth:sanctum']);
+
 // Register
-Route::post('/auth/register', [AuthController::class, 'register']);
+// Route::post('/auth/register', [AuthController::class, 'register']);
 
 // Login
-Route::post('/auth/login', [AuthController::class, 'login']);
+// Route::post('/auth/login', [AuthController::class, 'login']);
 
 // Middleware
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/auth/me', function (Request $request) {
         return $request->user();
     });
-    Route::post('auth/logout', [AuthController::class, 'logout']);
+    // Route::post('auth/logout', [AuthController::class, 'logout']);
 
     // App
     Route::apiResource('/books', BookController::class);
