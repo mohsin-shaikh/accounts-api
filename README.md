@@ -1,6 +1,6 @@
-## Cash Book API (Accounting)
+## Accounts API
 
-Cash Book API is a RESTful API for accounting.
+Accounts RESTful API with Authentication build with Laravel 9.
 
 ### Endpoints
 
