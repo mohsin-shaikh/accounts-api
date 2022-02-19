@@ -34,6 +34,8 @@ Accounts RESTful API with Authentication build with Laravel 9.
 -   4XX Error Client
 -   5XX Error Server
 
+<!-- ### -->
+
 ### License
 
 MIT
